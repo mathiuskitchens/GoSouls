@@ -4,6 +4,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 	"fmt"
+	"github.com/mathiuskitchens/gosouls/internal/game"
 	"os"
 )
 
@@ -24,17 +25,9 @@ var hudBoxStyle = lipgloss.NewStyle().
 	Margin(1).                                   // 1 space margin around the box
 	Border(lipgloss.ThickBorder())
 
-// This is a struct that outlines a blueprint for what a character is
-type Character struct {
-	name            string
-	currentHealth   int
-	maxHealth       int
-	equippedWeapons []string
-}
-
 // root state container...we nest Character in since we outlined it above
 type model struct {
-	player    Character
+	player    game.Character
 	lastEvent string
 }
 
@@ -49,8 +42,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c", "q":
 			return m, tea.Quit
 		case "d":
-			m.player.currentHealth -= 5
-			h := m.player.currentHealth
+			m.player.CurrentHealth -= 5
+			h := m.player.CurrentHealth
 			switch {
 			case h <= 0:
 				m.lastEvent = "YOU DIED. \n"
@@ -59,8 +52,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.lastEvent = "You took 5 damage! \n"
 			}
 		case "b":
-			m.player.currentHealth -= 10
-			h := m.player.currentHealth
+			m.player.CurrentHealth -= 10
+			h := m.player.CurrentHealth
 			switch {
 			case h <= 0:
 				m.lastEvent = "YOU DIED! REALLY! \n"
@@ -79,8 +72,8 @@ func (m model) View() tea.View {
 	content := fmt.Sprintf(
 		"%sYour health is %d/%d. \nPress 'q' to quit.\n",
 		m.lastEvent,
-		m.player.currentHealth,
-		m.player.maxHealth,
+		m.player.CurrentHealth,
+		m.player.MaxHealth,
 	)
 
 	styledContent := hudBoxStyle.Render(content)
@@ -89,10 +82,10 @@ func (m model) View() tea.View {
 
 func main() {
 	p := tea.NewProgram(model{
-		player: Character{
-			name:          "Mathius",
-			currentHealth: 20,
-			maxHealth:     20,
+		player: game.Character{
+			Name:          "Mathius",
+			CurrentHealth: 20,
+			MaxHealth:     20,
 		},
 	})
 
