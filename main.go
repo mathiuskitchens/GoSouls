@@ -2,28 +2,11 @@ package main
 
 import (
 	tea "charm.land/bubbletea/v2"
-	"charm.land/lipgloss/v2"
 	"fmt"
 	"github.com/mathiuskitchens/gosouls/internal/game"
+	"github.com/mathiuskitchens/gosouls/internal/ui"
 	"os"
 )
-
-// lip gloss styling section here...
-var style = lipgloss.NewStyle().
-	Bold(true).
-	Foreground(lipgloss.Color("FAFAFA")).
-	Background(lipgloss.Color("7D56F4")).
-	PaddingTop(2).
-	PaddingLeft(4).
-	Width(22)
-
-var hudBoxStyle = lipgloss.NewStyle().
-	Border(lipgloss.RoundedBorder()).
-	BorderForeground(lipgloss.Color("#7F1D1D")). // Dark blood-red border
-	Foreground(lipgloss.Color("#F3F4F6")).       // Off-white text
-	Padding(1, 2).                               // 1 line top/bottom, 2 spaces left/right
-	Margin(1).                                   // 1 space margin around the box
-	Border(lipgloss.ThickBorder())
 
 // root state container...we nest Character in since we outlined it above
 type model struct {
@@ -76,7 +59,7 @@ func (m model) View() tea.View {
 		m.player.MaxHealth,
 	)
 
-	styledContent := hudBoxStyle.Render(content)
+	styledContent := ui.HudBoxStyle.Render(content)
 	return tea.NewView(styledContent)
 }
 
